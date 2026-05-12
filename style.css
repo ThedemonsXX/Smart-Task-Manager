@@ -49,6 +49,13 @@ body {
   align-items: center;
   gap: 12px;
   max-width: 320px;
+  transition: opacity 0.35s ease-in-out, transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  opacity: 0;
+  transform: translateX(30px);
+}
+.notification[style*="display: flex"] {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
 }
 .notification p {
   overflow-wrap: break-word;
@@ -57,10 +64,11 @@ body {
 }
 .Closenotif {
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity 0.25s, transform 0.2s ease;
 }
 .Closenotif:hover {
   opacity: 0.7;
+  transform: scale(1.15) rotate(90deg);
 }
 
 /* DASHBOARD */
@@ -79,10 +87,14 @@ body {
   align-items: center;
   gap: 18px;
   backdrop-filter: blur(10px);
-  transition: 0.3s;
+  transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+  cursor: default;
 }
 .dashboards:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px) scale(1.02);
+  background: rgba(59,130,246,0.2);
+  border-color: #3b82f6;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
 }
 .dashboards img {
   width: 55px;
@@ -90,9 +102,17 @@ body {
   padding: 12px;
   background: rgba(255,255,255,0.08);
   border-radius: 14px;
+  transition: transform 0.3s ease;
+}
+.dashboards:hover img {
+  transform: scale(1.08) rotate(2deg);
 }
 .dashboards h2 {
   font-size: 2rem;
+  transition: color 0.2s;
+}
+.dashboards:hover h2 {
+  color: #60a5fa;
 }
 .dashboards span {
   color: #cbd5e1;
@@ -109,6 +129,7 @@ body {
   gap: 20px;
   flex-wrap: wrap;
   margin-bottom: 30px;
+  transition: background 0.3s;
 }
 .search {
   flex: 1;
@@ -126,6 +147,11 @@ body {
   color: #e2e8f0;
   cursor: pointer;
   font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+.filter label:hover {
+  color: #60a5fa;
+  transform: scale(1.02);
 }
 
 /* INPUTS */
@@ -141,6 +167,7 @@ select {
   outline: none;
   margin-top: 6px;
   font-family: inherit;
+  transition: all 0.25s ease;
 }
 input::placeholder,
 textarea::placeholder {
@@ -153,7 +180,15 @@ textarea {
 input:focus,
 textarea:focus,
 select:focus {
-  outline: 2px solid #3b82f6;
+  outline: none;
+  background: rgba(59,130,246,0.2);
+  box-shadow: 0 0 0 3px #3b82f6, 0 0 0 1px rgba(255,255,255,0.1);
+  transform: scale(1.01);
+}
+input:hover,
+textarea:hover,
+select:hover {
+  background: rgba(255,255,255,0.12);
 }
 
 /* BUTTONS */
@@ -167,10 +202,12 @@ select:focus {
   border-radius: 14px;
   cursor: pointer;
   font-weight: bold;
-  transition: 0.25s;
+  transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.2);
   overflow-wrap: break-word;
   font-family: inherit;
   font-size: 0.9rem;
+  position: relative;
+  overflow: hidden;
 }
 .CloseButton {
   background: linear-gradient(135deg, #ef4444, #dc2626);
@@ -178,7 +215,14 @@ select:focus {
 .Buttons:hover,
 .AddButton:hover,
 .CloseButton:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px) scale(1.02);
+  filter: brightness(1.1);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.35);
+}
+.Buttons:active,
+.AddButton:active,
+.CloseButton:active {
+  transform: translateY(2px) scale(0.98);
 }
 
 /* TABLE */
@@ -212,15 +256,27 @@ td {
   overflow-wrap: break-word;
   word-break: break-word;
   max-width: 250px;
+  transition: all 0.2s ease;
+}
+tr {
+  transition: all 0.25s ease;
 }
 tr:hover {
-  background: rgba(255,255,255,0.04);
+  background: rgba(59,130,246,0.15);
+  transform: scale(1.002);
 }
 td:last-child {
   min-width: 220px;
 }
 td button {
   margin: 5px !important;
+  transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+td button:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+td button:active {
+  transform: translateY(1px) scale(0.98);
 }
 
 /* POPUPS */
@@ -229,7 +285,7 @@ td button {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0.9);
   width: 92%;
   max-width: 500px;
   max-height: 90vh;
@@ -239,11 +295,21 @@ td button {
   border-radius: 28px;
   padding: 28px;
   z-index: 1000;
-  box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+  box-shadow: 0 25px 40px rgba(0,0,0,0.5);
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.4, 1.2);
+  opacity: 0;
+  visibility: hidden;
+}
+.popup[style*="display: inline"] {
+  display: block !important;
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  visibility: visible;
 }
 .popup h4 {
   margin-bottom: 20px;
   font-size: 1.7rem;
+  transition: color 0.2s;
 }
 .popup label {
   display: block;
@@ -259,8 +325,6 @@ td button {
 }
 
 /* ========== ENHANCED RESPONSIVE STYLES ========== */
-
-/* Medium screens (tablets, small laptops) */
 @media (max-width: 1024px) {
   .dashboard {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -282,7 +346,6 @@ td button {
   }
 }
 
-/* Tablets and below */
 @media (max-width: 768px) {
   body {
     padding: 14px;
@@ -322,7 +385,6 @@ td button {
     padding: 8px 14px;
     font-size: 0.8rem;
   }
-  /* make dashboard cards more compact */
   .dashboards {
     padding: 15px;
   }
@@ -334,7 +396,6 @@ td button {
   .dashboards h2 {
     font-size: 1.5rem;
   }
-  /* notification on mobile */
   .notification {
     top: 10px;
     right: 10px;
@@ -342,13 +403,16 @@ td button {
     max-width: none;
     width: auto;
     padding: 12px;
+    transform: translateY(-20px);
+  }
+  .notification[style*="display: flex"] {
+    transform: translateY(0) !important;
   }
   .notification p {
     font-size: 0.85rem;
   }
 }
 
-/* Small phones (<= 550px) */
 @media (max-width: 550px) {
   .hero h1 {
     font-size: 1.8rem;
@@ -404,7 +468,6 @@ td button {
     padding: 10px 16px;
     font-size: 0.85rem;
   }
-  /* improve table readability: allow horizontal scroll hint */
   .table-wrapper::after {
     content: "← swipe →";
     display: block;
@@ -415,7 +478,6 @@ td button {
   }
 }
 
-/* Very small devices (<= 380px) */
 @media (max-width: 380px) {
   .dashboards {
     flex-direction: column;
