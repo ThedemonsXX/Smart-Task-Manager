@@ -63,25 +63,25 @@ function notification() {
   const diffHours = diffMinutes / 60;
 
   if (diffMinutes < 60) {
-  const mins = Math.floor(diffMinutes);
-  return `Due soon: "${nearest_task.title}" — ${mins} minute${mins !== 1 ? "s" : ""} left`;
-} else if (diffHours < 24) {
-  const hours = Math.floor(diffHours);
-  const mins = Math.floor(diffMinutes % 60);
-  if (mins > 0) {
-    return `Due soon: "${nearest_task.title}" — ${hours} hour${hours !== 1 ? "s" : ""} and ${mins} minute${mins !== 1 ? "s" : ""} left`;
+    const mins = Math.floor(diffMinutes);
+    return `Due soon: "${nearest_task.title}" — ${mins} minute${mins !== 1 ? "s" : ""} left`;
+  } else if (diffHours < 24) {
+    const hours = Math.floor(diffHours);
+    const mins = Math.floor(diffMinutes % 60);
+    if (mins > 0) {
+      return `Due soon: "${nearest_task.title}" — ${hours} hour${hours !== 1 ? "s" : ""} and ${mins} minute${mins !== 1 ? "s" : ""} left`;
+    } else {
+      return `Due soon: "${nearest_task.title}" — ${hours} hour${hours !== 1 ? "s" : ""} left`;
+    }
   } else {
-    return `Due soon: "${nearest_task.title}" — ${hours} hour${hours !== 1 ? "s" : ""} left`;
+    const days = Math.floor(diffHours / 24);
+    const hours = Math.floor(diffHours % 24);
+    if (days === 1 && hours === 0) {
+      return `Due soon: "${nearest_task.title}" — One day left`;
+    } else {
+      return `Due soon: "${nearest_task.title}" — ${days}D ${hours}H left`;
+    }
   }
-} else {
-  const days = Math.floor(diffHours / 24);
-  const hours = Math.floor(diffHours % 24);
-  if (days === 1 && hours === 0) {
-    return `Due soon: "${nearest_task.title}" — One day left`;
-  } else {
-    return `Due soon: "${nearest_task.title}" — ${days}D ${hours}H left`;
-  }
-}
 }
 
 setInterval(() => {
@@ -192,7 +192,16 @@ table.addEventListener("click", (e) => {
     let tr = e.target.closest("tr");
     Mpopup.style.display = "inline";
     Mtitle.value = tr.dataset.title;
-    Mdate.value = new Date(tr.dataset.date).toISOString().slice(0, 16);
+    
+    // FIX: Convert stored UTC ISO string to local datetime-local format without shifting
+    let originalDate = new Date(tr.dataset.date);
+    let year = originalDate.getFullYear();
+    let month = String(originalDate.getMonth() + 1).padStart(2, '0');
+    let day = String(originalDate.getDate()).padStart(2, '0');
+    let hours = String(originalDate.getHours()).padStart(2, '0');
+    let minutes = String(originalDate.getMinutes()).padStart(2, '0');
+    Mdate.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+    
     Status.value = tr.dataset.status;
     Mdesc.value = tr.dataset.desc;
     hdninput.setAttribute("data-id", tr.dataset.id);
@@ -236,7 +245,8 @@ Mpopup.addEventListener("click", (e) => {
   if (e.target.classList.contains("ModifyButton")) {
     let id = hdninput.dataset.id;
     let title = Mtitle.value;
-    let date = Mdate.value;
+    // FIX: Convert local datetime-local value to UTC ISO string before saving
+    let date = new Date(Mdate.value).toISOString();
     let status = Status.value;
     let desc = Mdesc.value;
     for (let i = 0; i < data.length; i++) {
@@ -282,7 +292,7 @@ const searchField = document.querySelector("#searchfield");
 searchField.addEventListener("input", () => {
   let value = searchField.value.toLowerCase().trim();
   if (!value) {
-    
+
   } else {
     let filtered = data.filter((item) => {
      return item.title.toLowerCase().includes(value);
