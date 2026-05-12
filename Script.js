@@ -282,7 +282,7 @@ const searchField = document.querySelector("#searchfield");
 searchField.addEventListener("input", () => {
   let value = searchField.value.toLowerCase().trim();
   if (!value) {
-    addToTable(data);
+    
   } else {
     let filtered = data.filter((item) => {
      return item.title.toLowerCase().includes(value);
