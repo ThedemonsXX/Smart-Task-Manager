@@ -63,25 +63,25 @@ function notification() {
   const diffHours = diffMinutes / 60;
 
   if (diffMinutes < 60) {
-    const mins = Math.floor(diffMinutes);
-    return `The nearest task is "${nearest_task.title}". Time left: ${mins} minute${mins !== 1 ? "s" : ""}`;
-  } else if (diffHours < 24) {
-    const hours = Math.floor(diffHours);
-    const mins = Math.floor(diffMinutes % 60);
-    if (mins > 0) {
-      return `The nearest task is "${nearest_task.title}". Time left: ${hours} hour${hours !== 1 ? "s" : ""} and ${mins} minute${mins !== 1 ? "s" : ""}`;
-    } else {
-      return `The nearest task is "${nearest_task.title}". Time left: ${hours} hour${hours !== 1 ? "s" : ""}`;
-    }
+  const mins = Math.floor(diffMinutes);
+  return `Due soon: "${nearest_task.title}" — ${mins} minute${mins !== 1 ? "s" : ""} left`;
+} else if (diffHours < 24) {
+  const hours = Math.floor(diffHours);
+  const mins = Math.floor(diffMinutes % 60);
+  if (mins > 0) {
+    return `Due soon: "${nearest_task.title}" — ${hours} hour${hours !== 1 ? "s" : ""} and ${mins} minute${mins !== 1 ? "s" : ""} left`;
   } else {
-    const days = Math.floor(diffHours / 24);
-    const hours = Math.floor(diffHours % 24);
-    if (days === 1 && hours === 0) {
-      return `The nearest task is "${nearest_task.title}". Time left: One Day`;
-    } else {
-      return `The nearest task is "${nearest_task.title}". Time left: ${days}D ${hours}H`;
-    }
+    return `Due soon: "${nearest_task.title}" — ${hours} hour${hours !== 1 ? "s" : ""} left`;
   }
+} else {
+  const days = Math.floor(diffHours / 24);
+  const hours = Math.floor(diffHours % 24);
+  if (days === 1 && hours === 0) {
+    return `Due soon: "${nearest_task.title}" — One day left`;
+  } else {
+    return `Due soon: "${nearest_task.title}" — ${days}D ${hours}H left`;
+  }
+}
 }
 
 setInterval(() => {
